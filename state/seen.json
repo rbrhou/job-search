@@ -1,1 +1,314 @@
-{"version": 1, "jobs": {}}
+{
+  "version": 1,
+  "updated_at": "2026-09-11T16:59:13.852999+00:00",
+  "jobs": {
+    "0347b578c0ef73f549b9": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Full Stack Engineer, Link",
+      "url": "https://stripe.com/jobs/search?gh_jid=8062305"
+    },
+    "096aff9dca4e0e7e4e7f": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Databricks",
+      "title": "Senior Fullstack Software Engineer - Enterprise Configuration & Administration, CustomerLake",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8715639002"
+    },
+    "106cb2265305df274c12": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "ramp",
+      "title": "Software Engineer, Forward Deployed",
+      "url": "https://jobs.ashbyhq.com/ramp/9916e9da-7491-4c99-afd1-e4b8158fa58b"
+    },
+    "12379fbf020a5262f440": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Figma",
+      "title": "Support Engineer, AI Infrastructure & Tooling",
+      "url": "https://boards.greenhouse.io/figma/jobs/5802956004?gh_jid=5802956004"
+    },
+    "1fa67cac80dd4e432414": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, Safety Engineering",
+      "url": "https://jobs.ashbyhq.com/openai/9371f837-70ef-4387-a4b7-70f252b04aa5"
+    },
+    "1fc0550690053a461a42": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, Host Assurance",
+      "url": "https://jobs.ashbyhq.com/openai/0b9e565a-ae5f-40fc-8350-b59f71f76df1"
+    },
+    "21ccd0f6ddc1ddf222e9": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Software Engineer, New Grad",
+      "url": "https://stripe.com/jobs/search?gh_jid=8128744"
+    },
+    "27ce97e5258d48e5d39d": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Backend Engineer, Core Technology",
+      "url": "https://stripe.com/jobs/search?gh_jid=6042172"
+    },
+    "2b10459eac392693d86b": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Databricks",
+      "title": "Specialist Solutions Architect - Cloud Infrastructure & Platform (AWS)",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8739506002"
+    },
+    "2bbabc40f8ec722bdd27": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, Native Learning Experiences",
+      "url": "https://jobs.ashbyhq.com/openai/1098311d-3a07-40ad-8107-6245a492a0b3"
+    },
+    "3979282b45f37d092e6b": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Manufacturing Quality Engineer \u2013 Datacenter Infrastructure",
+      "url": "https://jobs.ashbyhq.com/openai/ece054ea-ac75-4b8a-bdbf-5cdf19368312"
+    },
+    "4437b63d4e3bd3614ec6": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Backend Engineer, Payments",
+      "url": "https://stripe.com/jobs/search?gh_jid=6692166"
+    },
+    "46623dca56a3f62e4031": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Software Engineer, Bridge",
+      "url": "https://stripe.com/jobs/search?gh_jid=7277110"
+    },
+    "486be07ad88969964ade": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Quality Engineer, Rack Infrastructure & Site Operations",
+      "url": "https://jobs.ashbyhq.com/openai/b71906c2-51a9-4ad7-a744-2390ccdc1ad8"
+    },
+    "5021547340f5408a3f6a": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Infrastructure Sourcing Operations Lead",
+      "url": "https://jobs.ashbyhq.com/openai/00f7eaa5-315d-44bd-9c11-047ee53f2b0d"
+    },
+    "54739016748a305cf907": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Full Stack Software Engineer, Product Explorations",
+      "url": "https://jobs.ashbyhq.com/openai/4d1ede8c-3d4c-4503-8408-81e4b68c5c91"
+    },
+    "595b095b0789b47cb7a1": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, HSM Infrastructure Security, Consumer Devices",
+      "url": "https://jobs.ashbyhq.com/openai/a14780e7-0316-478c-8e6a-d7629c31c49d"
+    },
+    "59ac81d10da5ee8f2224": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Databricks",
+      "title": "Sr Software Engineer, Infrastructure",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8493170002"
+    },
+    "660b3113ee8771264a40": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "Security Software Engineer, Detection & Response Platform",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/4595463008"
+    },
+    "724b9b6ffeeca64c33ad": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "Strategic Deals Lead, Compute Infrastructure",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5358108008"
+    },
+    "7c51501b0e165da5cd5a": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, AI for Chip Design",
+      "url": "https://jobs.ashbyhq.com/openai/56d541d3-02b5-44d8-b40b-4df72cdd0405"
+    },
+    "7e090c07a3691b179345": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Software Engineer - Smart Contract, Bridge",
+      "url": "https://stripe.com/jobs/search?gh_jid=7507904"
+    },
+    "8263c16a3a4b681f16f7": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, Financial Engineering",
+      "url": "https://jobs.ashbyhq.com/openai/4ef5bf23-cf0e-4b97-a639-11f963c99b88"
+    },
+    "86bc0b13440be42bf5c9": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Senior Software Engineer, Docs Product",
+      "url": "https://stripe.com/jobs/search?gh_jid=8177860"
+    },
+    "93613ecd1e3fc66762bb": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "IT Systems Engineer, Mobile Client Platform Engineer",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5396384008"
+    },
+    "938a7dfc4a4ad6610331": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, API Safety",
+      "url": "https://jobs.ashbyhq.com/openai/990397de-c00c-4577-b093-d8c82b4e9145"
+    },
+    "989517c0d23a0f63409b": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Software Engineer, Vulnerability Management",
+      "url": "https://stripe.com/jobs/search?gh_jid=8089353"
+    },
+    "9d1138eb5710c8c8c431": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "Software Engineer, Research Infrastructure",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5283063008"
+    },
+    "a040963372078446c481": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Systems Software Engineer, Silicon Bringup",
+      "url": "https://jobs.ashbyhq.com/openai/d1121575-a1a7-47c9-97e6-56c70f441143"
+    },
+    "a397c7d70a4aa1b57dad": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Lead, Technical Accounting (Compute Infrastructure)",
+      "url": "https://jobs.ashbyhq.com/openai/7c936cfb-99c4-4e18-a033-75baa07cbb81"
+    },
+    "a5f630ff31997adbdaf7": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Electrical Engineer, Actuator Test Infrastructure",
+      "url": "https://jobs.ashbyhq.com/openai/3fa44620-142a-47fe-b098-92923064d2f5"
+    },
+    "b06bb7331f4d0a015065": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, Model Runtime",
+      "url": "https://jobs.ashbyhq.com/openai/ec317080-e2d2-4a73-93e6-e0a9ae6fdf96"
+    },
+    "b55c9ad2288d05cd468b": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, API Frontiers",
+      "url": "https://jobs.ashbyhq.com/openai/b6a86e39-8059-4ccf-8d33-1bf5bd92fa86"
+    },
+    "b85c789ab9b281920f39": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Senior Software Engineer",
+      "url": "https://stripe.com/jobs/search?gh_jid=8175099"
+    },
+    "bea2dd9d21f530a8434b": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Full-Stack Software Engineer, Emerging Products",
+      "url": "https://jobs.ashbyhq.com/openai/f7d155c9-06e8-44f0-b2eb-bfa88707f2c1"
+    },
+    "cc4f36b7882535cac225": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Data Center Infrastructure Architect",
+      "url": "https://jobs.ashbyhq.com/openai/65bc2ffe-a622-47cd-949c-2ca8b7ec6951"
+    },
+    "d0127e00987f09d96dea": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "Software Engineer, Business Technology",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/5400153008"
+    },
+    "d8225867d21456183b1e": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Software Engineer, Metronome Infrastructure",
+      "url": "https://stripe.com/jobs/search?gh_jid=7737237"
+    },
+    "dc064d26450ad1cb132f": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Full Stack Engineer, Bridge",
+      "url": "https://stripe.com/jobs/search?gh_jid=8142764"
+    },
+    "df724e54268cf478126a": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Stripe",
+      "title": "Infrastructure Engineer, Privy",
+      "url": "https://stripe.com/jobs/search?gh_jid=7462961"
+    },
+    "ef2a05454a29bd81567a": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Software Engineer, AI accelerator Runtime",
+      "url": "https://jobs.ashbyhq.com/openai/9248eab6-74e0-4940-98eb-ca09b17da532"
+    },
+    "f26700e6682acf7be07a": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Mechanical Engineer, Dynamometer and Actuator Testing Infrastructure",
+      "url": "https://jobs.ashbyhq.com/openai/2b87bb06-ba33-4cab-b950-0df12ca85dcf"
+    },
+    "f3b9ed4d1950cd721eb0": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "greenhouse",
+      "company": "Anthropic",
+      "title": "Data Infrastructure Engineer, Pre-training",
+      "url": "https://job-boards.greenhouse.io/anthropic/jobs/4973067008"
+    },
+    "f5b570f777f024de55a5": {
+      "first_seen": "2026-09-11T16:59:13.852498+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Control Systems Software Engineer, Robotics",
+      "url": "https://jobs.ashbyhq.com/openai/60573bf4-13ad-4933-aba7-729f428e9f69"
+    }
+  }
+}
