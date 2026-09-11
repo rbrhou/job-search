@@ -1,1 +1,28 @@
+sources:
+  - type: greenhouse
+    boards: [stripe, databricks, anthropic, figma]
+  - type: lever
+    companies: [netflix, plaid]
+  - type: ashby
+    boards: [openai, ramp]
 
+match:
+  title_include: [software engineer, backend, full stack, infrastructure, platform engineer]
+  title_exclude: [intern, principal, staff, manager, director, sales, recruiter]
+  location_include: [united states, new york, san francisco, remote]
+  location_exclude: []
+  company_exclude: []
+  description_exclude: [security clearance]
+  remote_only: false
+  max_age_days: 21
+
+notifiers:
+  - type: discord
+    webhook_url: ${DISCORD_WEBHOOK_URL}
+    username: Job Search
+  - type: console
+
+state_path: state/seen.json
+max_per_run: 50
+notify_on_first_run: false
+request_timeout: 20
