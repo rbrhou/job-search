@@ -8,9 +8,13 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from typing import Any
 
+# Strictly tracking/pagination noise. Anything that identifies *which* job a
+# URL points at must stay: `gh_jid` is the Greenhouse job id and is the only
+# identity in a posting hosted on a company's own domain, and `vjk`/`jk` are
+# Indeed's job keys. Stripping those yields a link to a generic careers page.
 _TRACKING_PARAMS = re.compile(
-    r"^(utm_[a-z]+|gh_src|gh_jid|lever-source|source|ref|refId|trackingId|trk|"
-    r"originalSubdomain|position|pageNum|eBP|vjk|from)$",
+    r"^(utm_[a-z]+|gh_src|lever-source|source|ref|refId|trackingId|trk|"
+    r"originalSubdomain|pageNum|eBP|from)$",
     re.IGNORECASE,
 )
 
