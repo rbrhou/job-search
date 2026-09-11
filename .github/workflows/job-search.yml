@@ -1,0 +1,86 @@
+name: Job search
+
+on:
+  schedule:
+    # 13:00 UTC daily (09:00 ET / 06:00 PT). Cron here is always UTC.
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print matches without notifying or saving state"
+        type: boolean
+        default: false
+
+# Two runs committing state at once would conflict; let the newer one wait.
+concurrency:
+  group: job-search
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install
+        run: pip install -e .
+
+      - name: Check the webhook secret is set
+        if: ${{ !inputs.dry_run }}
+        run: |
+          if [ -z "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
+            echo "::error::DISCORD_WEBHOOK_URL is not set. Add it under" \
+                 "Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
+      - name: Run
+        id: search
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          set +e
+          jobsearch run ${{ inputs.dry_run && '--dry-run' || '' }} | tee summary.txt
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarise
+        if: always()
+        run: |
+          echo "### Job search" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat summary.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "no output"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      # State is what stops the next run re-sending today's jobs, so commit it
+      # even when a source errored and the run exited non-zero.
+      - name: Commit state
+        if: ${{ always() && !inputs.dry_run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- state/; then
+            echo "no state change"
+            exit 0
+          fi
+          git add state/
+          git commit -m "chore: update seen-jobs state [skip ci]"
+          # Another run may have pushed while this one was working.
+          for attempt in 1 2 3 4; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push failed, retrying in $((2 ** attempt))s"
+            sleep $((2 ** attempt))
+          done
+          exit 1
+
+      - name: Propagate the run's exit code
+        if: ${{ always() && steps.search.outputs.exit_code != '0' }}
+        run: exit 1

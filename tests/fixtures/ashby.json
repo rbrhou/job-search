@@ -1,0 +1,17 @@
+{
+  "jobs": [
+    {
+      "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "title": "Infrastructure Engineer",
+      "jobUrl": "https://jobs.ashbyhq.com/initech/7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "location": "Remote (US)",
+      "department": "Infrastructure",
+      "team": "Core",
+      "isRemote": true,
+      "publishedAt": "2026-09-09T12:00:00.000Z",
+      "descriptionPlain": "Own our compute platform.",
+      "companyName": "Initech",
+      "compensation": {"summary": "$180K - $220K"}
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "jobs": [
+    {
+      "id": 4512345,
+      "title": "Senior Backend Engineer",
+      "absolute_url": "https://boards.greenhouse.io/acme/jobs/4512345?gh_src=abc123",
+      "updated_at": "2026-09-08T10:15:00-04:00",
+      "location": {"name": "New York, NY"},
+      "departments": [{"id": 1, "name": "Engineering"}],
+      "company_name": "Acme Corp",
+      "content": "&lt;p&gt;We are hiring a &lt;strong&gt;backend&lt;/strong&gt; engineer.&lt;/p&gt;"
+    },
+    {
+      "id": 4512346,
+      "title": "Engineering Manager, Payments",
+      "absolute_url": "https://boards.greenhouse.io/acme/jobs/4512346",
+      "updated_at": "2026-09-01T09:00:00Z",
+      "location": {"name": "Remote - US"},
+      "departments": [],
+      "company_name": "Acme Corp",
+      "content": ""
+    },
+    {
+      "id": 4512347,
+      "title": "Malformed posting with no url",
+      "location": {"name": "Nowhere"}
+    }
+  ],
+  "meta": {"total": 3}
+}
