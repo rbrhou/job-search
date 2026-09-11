@@ -1,0 +1,21 @@
+{
+  "name": "Hooli",
+  "jobs": [
+    {
+      "id": 991,
+      "shortcode": "ABC123DEF4",
+      "title": "Platform Engineer",
+      "url": "https://apply.workable.com/hooli/j/ABC123DEF4/",
+      "department": "Platform",
+      "published_on": "2026-09-05",
+      "description": "Scale the platform.",
+      "location": {
+        "city": "London",
+        "region": "England",
+        "country": "United Kingdom",
+        "workplace": "remote",
+        "telecommuting": true
+      }
+    }
+  ]
+}

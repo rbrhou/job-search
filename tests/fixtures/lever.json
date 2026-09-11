@@ -1,0 +1,21 @@
+[
+  {
+    "id": "0f1b2c3d-4e5f-6789-abcd-ef0123456789",
+    "text": "Full Stack Engineer",
+    "hostedUrl": "https://jobs.lever.co/globex/0f1b2c3d-4e5f-6789-abcd-ef0123456789",
+    "applyUrl": "https://jobs.lever.co/globex/0f1b2c3d/apply",
+    "createdAt": 1788739200000,
+    "workplaceType": "remote",
+    "categories": {"location": "San Francisco, CA", "team": "Product Engineering"},
+    "descriptionPlain": "Build product surfaces end to end."
+  },
+  {
+    "id": "aaaa1111-bbbb-2222-cccc-333344445555",
+    "text": "Sales Development Representative",
+    "hostedUrl": "https://jobs.lever.co/globex/aaaa1111",
+    "createdAt": 1788393600000,
+    "workplaceType": "onsite",
+    "categories": {"location": "Austin, TX", "team": "Sales"},
+    "descriptionPlain": "Own the top of funnel."
+  }
+]

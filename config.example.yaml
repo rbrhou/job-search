@@ -1,0 +1,121 @@
+# Copy to config.yaml and edit. config.yaml is gitignored — keep secrets out of
+# the repo by referencing environment variables as ${VAR}.
+
+# ---------------------------------------------------------------------------
+# Where to look
+# ---------------------------------------------------------------------------
+sources:
+  # Company boards. Find the slug in a company's careers URL, e.g.
+  # boards.greenhouse.io/stripe -> "stripe".
+  - type: greenhouse
+    boards:
+      - stripe
+      - databricks
+      - anthropic
+
+  # jobs.lever.co/<company>
+  - type: lever
+    companies:
+      - netflix
+      - plaid
+
+  # jobs.ashbyhq.com/<board>
+  - type: ashby
+    boards:
+      - openai
+      - ramp
+
+  # apply.workable.com/<account>
+  - type: workable
+    enabled: false
+    accounts:
+      - your-company
+
+  # Opt-in: LinkedIn's User Agreement prohibits automated scraping and the
+  # endpoint blocks datacenter IPs, so a GitHub Actions run will often get
+  # nothing back. Enabled only with accept_terms_risk, and a block is logged as
+  # a warning rather than failing the run.
+  - type: linkedin
+    enabled: false
+    accept_terms_risk: true
+    posted_within: week        # day | week | month
+    workplace: remote          # onsite | remote | hybrid (omit for any)
+    max_pages: 2
+    queries:
+      - keywords: "backend engineer"
+        location: "United States"
+      - keywords: "platform engineer"
+        location: "Remote"
+
+  # Opt-in, same caveats, plus Cloudflare. Set base_url to a licensed feed that
+  # returns Indeed's mosaic JSON if you need this to work unattended.
+  - type: indeed
+    enabled: false
+    accept_terms_risk: true
+    posted_within_days: 7
+    max_pages: 2
+    # base_url: https://your-licensed-feed.example.com
+    queries:
+      - what: "software engineer"
+        where: "Remote"
+
+# ---------------------------------------------------------------------------
+# What counts as a match
+# ---------------------------------------------------------------------------
+match:
+  # A posting must contain at least one of these in its title. Empty = allow all.
+  title_include:
+    - software engineer
+    - backend
+    - full stack
+    - platform engineer
+    - infrastructure
+
+  # ...and none of these.
+  title_exclude:
+    - intern
+    - principal
+    - staff
+    - manager
+    - director
+    - sales
+
+  # Empty = any location. Remote roles always satisfy this filter.
+  location_include:
+    - united states
+    - new york
+    - san francisco
+    - remote
+
+  location_exclude:
+    - japan
+    - germany
+
+  company_exclude: []
+  description_exclude:
+    - security clearance
+
+  remote_only: false
+  max_age_days: 21
+
+# ---------------------------------------------------------------------------
+# Where to send matches
+# ---------------------------------------------------------------------------
+notifiers:
+  - type: discord
+    # Never hardcode this. Set DISCORD_WEBHOOK_URL locally, or add it as a
+    # GitHub Actions repository secret.
+    webhook_url: ${DISCORD_WEBHOOK_URL}
+    username: Job Search
+    # mention: "<@&123456789012345678>"   # ping a role on each digest
+
+  - type: console
+    enabled: true
+
+# ---------------------------------------------------------------------------
+# Behaviour
+# ---------------------------------------------------------------------------
+state_path: state/seen.json
+max_per_run: 50            # cap on postings per digest, so a board dump can't flood
+notify_on_first_run: false # first run records a baseline silently; set true to alert
+request_timeout: 20
