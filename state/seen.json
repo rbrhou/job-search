@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-11T16:59:13.852999+00:00",
+  "updated_at": "2026-09-12T16:09:21.093140+00:00",
   "jobs": {
     "0347b578c0ef73f549b9": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
@@ -170,6 +170,13 @@
       "title": "Senior Software Engineer, Docs Product",
       "url": "https://stripe.com/jobs/search?gh_jid=8177860"
     },
+    "8ee4f86c38acaa246d81": {
+      "first_seen": "2026-09-12T16:09:21.092471+00:00",
+      "source": "greenhouse",
+      "company": "Databricks",
+      "title": "Specialist Solutions Architect - Cloud Infrastructure & Platform (Azure)",
+      "url": "https://databricks.com/company/careers/open-positions/job?gh_jid=8739507002"
+    },
     "93613ecd1e3fc66762bb": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
       "source": "greenhouse",
@@ -246,6 +253,13 @@
       "company": "openai",
       "title": "Full-Stack Software Engineer, Emerging Products",
       "url": "https://jobs.ashbyhq.com/openai/f7d155c9-06e8-44f0-b2eb-bfa88707f2c1"
+    },
+    "c3fcb7264800146a63e9": {
+      "first_seen": "2026-09-12T16:09:21.092471+00:00",
+      "source": "ashby",
+      "company": "openai",
+      "title": "Backend Software Engineer, ChatGPT ImageGen",
+      "url": "https://jobs.ashbyhq.com/openai/e7a4ee23-138a-4004-916e-72a452e7d115"
     },
     "cc4f36b7882535cac225": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
