@@ -123,6 +123,20 @@ def test_max_per_run_caps_the_digest(tmp_path, patched_client):
     assert len(embeds) == 1
     # Newest first, so a truncated digest keeps the freshest posting.
     assert embeds[0]["title"] == "Senior Backend Engineer"
+    # The held-back posting must stay unrecorded so it leads the next digest,
+    # rather than being marked seen and silently lost.
+    assert len(SeenStore(config.state_path)) == 1
+
+
+def test_capped_postings_arrive_on_the_following_run(tmp_path, patched_client):
+    config = Config.from_dict(base_config(tmp_path, match={}, max_per_run=1))
+    run(config)
+    patched_client.posts.clear()
+
+    report = run(config)
+    assert report.notified == 1
+    titles = [e["title"] for e in patched_client.posts[0][1]["json"]["embeds"]]
+    assert titles == ["Engineering Manager, Payments"]
 
 
 def test_an_opt_in_source_without_acknowledgement_is_refused(tmp_path, patched_client):
@@ -143,3 +157,17 @@ def test_an_opt_in_source_runs_once_acknowledged(tmp_path, monkeypatch):
         {"type": "linkedin", "accept_terms_risk": True, "queries": [{"keywords": "swe"}]},
     ]))
     assert run(config).fetched == 0
+
+
+def test_the_report_breaks_down_why_postings_were_rejected(tmp_path, patched_client):
+    # Without this, a config that matches nothing gives no clue which filter
+    # is responsible.
+    config = Config.from_dict(base_config(tmp_path, match={
+        "title_include": ["backend"], "location_include": ["antarctica"]}))
+    report = run(config)
+
+    assert report.matched == 0
+    # One posting fails the title group, the other passes it but fails location.
+    assert report.rejections == {"title_include": 1, "location_include": 1}
+    assert "rejected by:" in report.summary()
+    assert "location_include 1" in report.summary()

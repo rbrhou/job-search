@@ -26,7 +26,7 @@ def test_title_include_is_case_insensitive():
 def test_title_include_rejects_a_non_match():
     result = evaluate(make_job(title="Recruiter"), MatchConfig(title_include=["backend"]), NOW)
     assert not result.matched
-    assert "title_include" in result.reason
+    assert "matches none of [backend]" in result.reason
 
 
 def test_title_exclude_wins_over_include():
@@ -110,3 +110,68 @@ def test_keywords_match_as_substrings_not_whole_words():
         MatchConfig(title_include=["engineer"], title_exclude=["manager"]),
         NOW,
     ).matched
+
+
+# --- AND-ed keyword groups ----------------------------------------------------
+
+QUANT_INTERN = [["quantitative", "data scien"], ["intern", "co-op"]]
+
+
+def test_a_flat_list_stays_a_single_or_group():
+    match = MatchConfig(title_include=["backend", "platform"])
+    assert evaluate(make_job(title="Platform Engineer"), match, NOW).matched
+
+
+def test_every_group_must_match():
+    match = MatchConfig(title_include=QUANT_INTERN)
+    assert evaluate(make_job(title="Quantitative Research Intern"), match, NOW).matched
+    assert evaluate(make_job(title="Data Science Co-op Student"), match, NOW).matched
+
+
+def test_matching_only_the_role_group_is_rejected():
+    # A full-time quant role is not an internship.
+    result = evaluate(make_job(title="Quantitative Researcher"), MatchConfig(title_include=QUANT_INTERN), NOW)
+    assert not result.matched
+    assert "intern" in result.reason
+
+
+def test_matching_only_the_internship_group_is_rejected():
+    # An internship in the wrong field.
+    result = evaluate(make_job(title="Software Engineer Intern"), MatchConfig(title_include=QUANT_INTERN), NOW)
+    assert not result.matched
+    assert "quantitative" in result.reason
+
+
+def test_groups_survive_a_yaml_round_trip():
+    import yaml
+
+    from jobsearch.config import MatchConfig as MC
+
+    raw = yaml.safe_load(
+        "title_include:\n"
+        "  - [quantitative, actuarial]\n"
+        "  - [intern, co-op]\n"
+    )
+    match = MC.from_dict(raw)
+    assert match.title_include == [["quantitative", "actuarial"], ["intern", "co-op"]]
+    assert evaluate(make_job(title="Actuarial Analyst Intern"), match, NOW).matched
+    assert not evaluate(make_job(title="Actuarial Analyst"), match, NOW).matched
+
+
+def test_a_long_group_truncates_its_rejection_reason():
+    match = MatchConfig(title_include=[["a1", "b2", "c3", "d4", "e5", "f6"]])
+    assert "…" in evaluate(make_job(title="nope"), match, NOW).reason
+
+
+def test_remote_can_be_made_to_not_satisfy_a_location_filter():
+    # A country-bound search: "Remote - US" is not workable from Canada.
+    match = MatchConfig(location_include=["canada", "toronto"], remote_satisfies_location=False)
+    assert not evaluate(make_job(location="Remote - US"), match, NOW).matched
+    # A remote role that names the country still matches on the country itself.
+    assert evaluate(make_job(location="Remote - Canada"), match, NOW).matched
+    assert evaluate(make_job(location="Toronto, ON"), match, NOW).matched
+
+
+def test_remote_satisfies_location_by_default():
+    match = MatchConfig(location_include=["canada"])
+    assert evaluate(make_job(location="Remote - US"), match, NOW).matched

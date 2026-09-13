@@ -99,10 +99,26 @@ match:
 
 Matching is case-insensitive **substring** matching, not whole-word: `engineer`
 also matches `Engineering Manager`. Narrow with `title_exclude` rather than
-expecting word boundaries. Two deliberate behaviours worth knowing:
+expecting word boundaries.
+
+`title_include` keywords are OR-ed. Nest them to build groups that are AND-ed,
+for when two things must both hold:
+
+```yaml
+title_include:
+  - [quantitative, actuarial, data scien]   # the role, and
+  - [intern, co-op, summer analyst]         # an internship
+```
+
+That matches `Actuarial Analyst Co-op` but rejects both `Actuarial Analyst`
+(not an internship) and `Software Engineer Intern` (wrong field).
+
+Two deliberate behaviours worth knowing:
 
 - A **remote** role satisfies `location_include` regardless of the city named,
-  since it is workable from anywhere.
+  since it is workable from anywhere. Set `remote_satisfies_location: false`
+  when your search is tied to one country and `Remote - US` is not a role you
+  could take.
 - A posting with **no date** survives `max_age_days`; some boards omit
   timestamps, and dropping those would hide real matches.
 
@@ -120,6 +136,8 @@ worth knowing:
   `notify_on_first_run: true` if you would rather get the initial dump.
 - **If Discord fails, nothing is recorded**, so the next run retries those jobs
   rather than silently swallowing them.
+- **Postings held back by `max_per_run` are not recorded**, so they lead the
+  next digest rather than being silently dropped.
 - **Deleting `state/seen.json` re-seeds** rather than re-sending everything.
 - Entries older than 180 days are pruned to keep the file small.
 

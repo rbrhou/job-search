@@ -15,6 +15,9 @@ _REMOTE_HINTS = ("remote", "anywhere", "distributed", "work from home", "wfh")
 class MatchResult:
     matched: bool
     reason: str = ""
+    #: Which filter rejected the posting, for the run's rejection breakdown.
+    #: Stable across message wording, unlike `reason`.
+    category: str = ""
 
 
 def _contains_any(haystack: str, needles: list[str]) -> str | None:
@@ -37,40 +40,46 @@ def evaluate(job: Job, match: MatchConfig, now: datetime | None = None) -> Match
     """Apply every configured filter, reporting why a posting was dropped."""
     now = now or datetime.now(timezone.utc)
 
-    if match.title_include and not _contains_any(job.title, match.title_include):
-        return MatchResult(False, "title matches no title_include keyword")
+    # Every group must hit: groups are AND-ed, keywords within one are OR-ed.
+    for group in match.title_include:
+        if not _contains_any(job.title, group):
+            shown = ", ".join(group[:4]) + ("…" if len(group) > 4 else "")
+            return MatchResult(False, f"title matches none of [{shown}]", "title_include")
 
     hit = _contains_any(job.title, match.title_exclude)
     if hit:
-        return MatchResult(False, f"title contains excluded keyword {hit!r}")
+        return MatchResult(False, f"title contains excluded keyword {hit!r}", "title_exclude")
 
     hit = _contains_any(job.company, match.company_exclude)
     if hit:
-        return MatchResult(False, f"company excluded by {hit!r}")
+        return MatchResult(False, f"company excluded by {hit!r}", "company_exclude")
 
     hit = _contains_any(job.location, match.location_exclude)
     if hit:
-        return MatchResult(False, f"location contains excluded keyword {hit!r}")
+        return MatchResult(False, f"location contains excluded keyword {hit!r}", "location_exclude")
 
     if match.description_exclude:
         hit = _contains_any(job.description, match.description_exclude)
         if hit:
-            return MatchResult(False, f"description contains excluded keyword {hit!r}")
+            return MatchResult(False, f"description contains excluded keyword {hit!r}", "description_exclude")
 
     if match.remote_only and not looks_remote(job):
-        return MatchResult(False, "not a remote role")
+        return MatchResult(False, "not a remote role", "remote_only")
 
     if match.location_include:
-        # A remote role satisfies a location filter — it is workable from anywhere.
-        if not _contains_any(job.location, match.location_include) and not looks_remote(job):
-            return MatchResult(False, "location matches no location_include keyword")
+        # A remote role normally satisfies a location filter, being workable from
+        # anywhere — unless the search is tied to one country, where "Remote - US"
+        # is not a role you can take.
+        remote_counts = match.remote_satisfies_location and looks_remote(job)
+        if not _contains_any(job.location, match.location_include) and not remote_counts:
+            return MatchResult(False, "location matches no location_include keyword", "location_include")
 
     if match.max_age_days is not None:
         age = job.age_days(now)
         if age is not None and age > match.max_age_days:
-            return MatchResult(False, f"posted {age:.0f} days ago (max {match.max_age_days})")
+            return MatchResult(False, f"posted {age:.0f} days ago (max {match.max_age_days})", "max_age_days")
 
-    return MatchResult(True, "matched")
+    return MatchResult(True, "matched", "")
 
 
 def filter_jobs(jobs: list[Job], match: MatchConfig, now: datetime | None = None) -> list[Job]:

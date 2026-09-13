@@ -70,6 +70,11 @@ match:
     - full stack
     - platform engineer
     - infrastructure
+  # Nesting makes groups that are AND-ed, while keywords inside one are OR-ed.
+  # Use it when two things must both be true — a role AND a seniority, say:
+  #   title_include:
+  #     - [quantitative, actuarial, data scien]   # the role
+  #     - [intern, co-op]                         # and an internship
 
   # ...and none of these.
   title_exclude:
@@ -96,6 +101,10 @@ match:
     - security clearance
 
   remote_only: false
+  # By default a remote role satisfies location_include, being workable from
+  # anywhere. Set false for a search tied to one country, where a remote role
+  # posted elsewhere is not one you could actually take.
+  remote_satisfies_location: true
   max_age_days: 21
 
 # ---------------------------------------------------------------------------
