@@ -37,8 +37,11 @@ def evaluate(job: Job, match: MatchConfig, now: datetime | None = None) -> Match
     """Apply every configured filter, reporting why a posting was dropped."""
     now = now or datetime.now(timezone.utc)
 
-    if match.title_include and not _contains_any(job.title, match.title_include):
-        return MatchResult(False, "title matches no title_include keyword")
+    # Every group must hit: groups are AND-ed, keywords within one are OR-ed.
+    for group in match.title_include:
+        if not _contains_any(job.title, group):
+            shown = ", ".join(group[:4]) + ("…" if len(group) > 4 else "")
+            return MatchResult(False, f"title matches none of [{shown}]")
 
     hit = _contains_any(job.title, match.title_exclude)
     if hit:
@@ -61,8 +64,11 @@ def evaluate(job: Job, match: MatchConfig, now: datetime | None = None) -> Match
         return MatchResult(False, "not a remote role")
 
     if match.location_include:
-        # A remote role satisfies a location filter — it is workable from anywhere.
-        if not _contains_any(job.location, match.location_include) and not looks_remote(job):
+        # A remote role normally satisfies a location filter, being workable from
+        # anywhere — unless the search is tied to one country, where "Remote - US"
+        # is not a role you can take.
+        remote_counts = match.remote_satisfies_location and looks_remote(job)
+        if not _contains_any(job.location, match.location_include) and not remote_counts:
             return MatchResult(False, "location matches no location_include keyword")
 
     if match.max_age_days is not None:

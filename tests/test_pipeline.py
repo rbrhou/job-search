@@ -123,6 +123,20 @@ def test_max_per_run_caps_the_digest(tmp_path, patched_client):
     assert len(embeds) == 1
     # Newest first, so a truncated digest keeps the freshest posting.
     assert embeds[0]["title"] == "Senior Backend Engineer"
+    # The held-back posting must stay unrecorded so it leads the next digest,
+    # rather than being marked seen and silently lost.
+    assert len(SeenStore(config.state_path)) == 1
+
+
+def test_capped_postings_arrive_on_the_following_run(tmp_path, patched_client):
+    config = Config.from_dict(base_config(tmp_path, match={}, max_per_run=1))
+    run(config)
+    patched_client.posts.clear()
+
+    report = run(config)
+    assert report.notified == 1
+    titles = [e["title"] for e in patched_client.posts[0][1]["json"]["embeds"]]
+    assert titles == ["Engineering Manager, Payments"]
 
 
 def test_an_opt_in_source_without_acknowledgement_is_refused(tmp_path, patched_client):

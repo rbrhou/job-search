@@ -40,17 +40,48 @@ def _expand_env(value: Any) -> Any:
     return value
 
 
+def _keyword_groups(value: Any) -> list[list[str]]:
+    """Normalise a keyword filter into AND-ed groups of OR-ed keywords.
+
+    A flat list is one group (match any), which is the common case:
+        title_include: [backend, platform]
+
+    A list of lists is several groups, and a title must hit every one. That is
+    how you say "a quant role AND an internship" rather than "either":
+        title_include:
+          - [quantitative, data scien]
+          - [intern, co-op]
+    """
+    if not value:
+        return []
+    if isinstance(value, str):
+        return [[value.lower()]]
+    if all(isinstance(item, str) for item in value):
+        return [[item.lower() for item in value]]
+    groups = []
+    for entry in value:
+        if isinstance(entry, str):
+            groups.append([entry.lower()])
+        else:
+            groups.append([str(item).lower() for item in entry])
+    return [g for g in groups if g]
+
+
 @dataclass
 class MatchConfig:
     """Filters applied to every posting a source returns."""
 
-    title_include: list[str] = field(default_factory=list)
+    title_include: list[list[str]] = field(default_factory=list)
     title_exclude: list[str] = field(default_factory=list)
     location_include: list[str] = field(default_factory=list)
     location_exclude: list[str] = field(default_factory=list)
     company_exclude: list[str] = field(default_factory=list)
     description_exclude: list[str] = field(default_factory=list)
     remote_only: bool = False
+    #: Whether a remote role satisfies location_include regardless of the city
+    #: named. True suits "anywhere is fine"; set False when the search is tied
+    #: to one country, where a remote role elsewhere is not actually workable.
+    remote_satisfies_location: bool = True
     max_age_days: int | None = None
 
     @classmethod
@@ -63,15 +94,20 @@ class MatchConfig:
                 f"Valid keys: {', '.join(sorted(known))}"
             )
         return cls(
-            title_include=[s.lower() for s in data.get("title_include", [])],
+            title_include=_keyword_groups(data.get("title_include")),
             title_exclude=[s.lower() for s in data.get("title_exclude", [])],
             location_include=[s.lower() for s in data.get("location_include", [])],
             location_exclude=[s.lower() for s in data.get("location_exclude", [])],
             company_exclude=[s.lower() for s in data.get("company_exclude", [])],
             description_exclude=[s.lower() for s in data.get("description_exclude", [])],
             remote_only=bool(data.get("remote_only", False)),
+            remote_satisfies_location=bool(data.get("remote_satisfies_location", True)),
             max_age_days=data.get("max_age_days"),
         )
+
+    def __post_init__(self) -> None:
+        # Accept a flat list from direct construction, not just from YAML.
+        self.title_include = _keyword_groups(self.title_include)
 
 
 @dataclass

@@ -1,20 +1,108 @@
-sources:
-  - type: greenhouse
-    boards: [stripe, databricks, anthropic, figma]
-  - type: lever
-    companies: [netflix, plaid]
-  - type: ashby
-    boards: [openai, ramp]
+# Target: Summer 2027 internships in quantitative / actuarial / data roles,
+# based in Canada (Toronto, Vancouver, Montreal preferred).
 
+sources:
+  # --- Quant trading & hedge funds (most quant internships live here) --------
+  - type: greenhouse
+    boards:
+      - wearehrt            # Hudson River Trading
+      - point72
+      - jumptrading
+      - drw
+      - imc
+      - optiver
+      - akunacapital
+      - fiveringsllc        # Five Rings
+      - squarepointcapital
+      - radixtrading
+      - oldmissioncapital
+      - belvederetrading
+      - citadel
+      - citadelsecurities
+      - twosigma
+      - janestreet
+      - aqrcapitalmanagement
+      - millenniummanagement
+
+  # --- Canadian tech / fintech (data science & analytics internships) -------
+  - type: greenhouse
+    boards:
+      - shopify
+      - wealthsimple
+      - faire
+      - 1password
+      - clio
+      - coveo
+      - lightspeedcommerce
+      - ssense
+
+  - type: lever
+    companies:
+      - ada
+      - benchsci
+      - hootsuite
+      - thinkific
+
+  - type: ashby
+    boards:
+      - cohere
+
+# ---------------------------------------------------------------------------
+# Two AND-ed groups: a posting must be BOTH a target role AND an internship.
+# Keywords inside a group are OR-ed; keywords match as substrings.
+# ---------------------------------------------------------------------------
 match:
-  title_include: [software engineer, backend, full stack, infrastructure, platform engineer]
-  title_exclude: [intern, principal, staff, manager, director, sales, recruiter]
-  location_include: [united states, new york, san francisco, remote]
+  title_include:
+    # Group 1 — the role. "quant" covers quantitative researcher/analyst/trader,
+    # "data analy" covers analyst/analytics/analysis, "data scien" covers
+    # scientist/science.
+    - [quant, actuarial, financial engineering, data analy, data scien, analytics]
+    # Group 2 — the internship. "co-op" and "student" matter in Canada, and
+    # "summer analyst" is the finance sector's word for an internship.
+    - [intern, co-op, coop, summer analyst, student]
+
+  title_exclude:
+    # Seniority: an internship is none of these.
+    - senior
+    - staff
+    - principal
+    - director
+    - manager
+    - vice president
+    - head of
+    # Wrong recruiting cycle — you want Summer 2027.
+    - summer 2026
+    - winter 2026
+    - fall 2026
+    - spring 2026
+    - summer 2025
+    # "intern" would otherwise match "Internal Audit".
+    - internal audit
+
+  location_include:
+    - canada
+    - toronto
+    - vancouver
+    - montreal
+    - montréal
+    - ontario
+    - british columbia
+    - quebec
+    - québec
+    - waterloo
+    - ottawa
+    - calgary
+
   location_exclude: []
   company_exclude: []
-  description_exclude: [security clearance]
+  description_exclude: []
   remote_only: false
-  max_age_days: 21
+  # A remote US internship is not workable on a Canadian search.
+  remote_satisfies_location: false
+
+  # Summer 2027 recruiting opens early — some quant firms post in July/August.
+  # 90 days reaches back across the whole early cycle.
+  max_age_days: 90
 
 notifiers:
   - type: discord
@@ -23,6 +111,6 @@ notifiers:
   - type: console
 
 state_path: state/seen.json
-max_per_run: 50
+max_per_run: 100
 notify_on_first_run: false
 request_timeout: 20

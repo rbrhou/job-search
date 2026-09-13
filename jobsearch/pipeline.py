@@ -110,10 +110,11 @@ def run(config: Config, dry_run: bool = False, explain: bool = False) -> RunRepo
         fresh.sort(key=lambda j: (j.posted_at is not None, j.posted_at), reverse=True)
         if len(fresh) > config.max_per_run:
             log.info(
-                "capping digest at %d of %d new postings; the rest are recorded as seen "
-                "and will not be re-sent",
+                "capping digest at %d of %d new postings; the remaining %d stay unrecorded "
+                "and lead the next run",
                 config.max_per_run,
                 len(fresh),
+                len(fresh) - config.max_per_run,
             )
             fresh = fresh[: config.max_per_run]
 
@@ -137,7 +138,10 @@ def run(config: Config, dry_run: bool = False, explain: bool = False) -> RunRepo
         else:
             log.info("no new postings this run")
 
-        store.record(matched)
+        # Record only what was actually sent. Recording every match would mark
+        # postings the cap held back as seen, silently dropping them for good;
+        # left unrecorded they simply lead the next digest.
+        store.record(fresh)
         pruned = store.prune()
         if pruned:
             log.info("pruned %d stale state entries", pruned)
