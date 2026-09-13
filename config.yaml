@@ -2,50 +2,31 @@
 # based in Canada (Toronto, Vancouver, Montreal preferred).
 
 sources:
-  # --- Quant trading & hedge funds (most quant internships live here) --------
+  # Boards verified live on 2026-09-13 (run #4). Slugs that 404'd have been
+  # removed: wearehrt, drw, radixtrading, belvederetrading, citadel,
+  # citadelsecurities, twosigma, aqrcapitalmanagement, millenniummanagement,
+  # shopify, wealthsimple, 1password, clio, coveo, lightspeedcommerce, ssense,
+  # and lever/ada, lever/hootsuite, lever/thinkific.
   - type: greenhouse
     boards:
-      - wearehrt            # Hudson River Trading
-      - point72
-      - jumptrading
-      - drw
-      - imc
-      - optiver
-      - akunacapital
-      - fiveringsllc        # Five Rings
-      - squarepointcapital
-      - radixtrading
-      - oldmissioncapital
-      - belvederetrading
-      - citadel
-      - citadelsecurities
-      - twosigma
-      - janestreet
-      - aqrcapitalmanagement
-      - millenniummanagement
-
-  # --- Canadian tech / fintech (data science & analytics internships) -------
-  - type: greenhouse
-    boards:
-      - shopify
-      - wealthsimple
-      - faire
-      - 1password
-      - clio
-      - coveo
-      - lightspeedcommerce
-      - ssense
+      - janestreet          # 230 postings
+      - point72             # 229
+      - imc                 # 171
+      - jumptrading         # 107
+      - squarepointcapital  # 93
+      - faire               # 67
+      - oldmissioncapital   # 38
+      - akunacapital        # 37
+      - fiveringsllc        # 16
+      - optiver             # 0 — board is live but currently empty
 
   - type: lever
     companies:
-      - ada
-      - benchsci
-      - hootsuite
-      - thinkific
+      - benchsci            # 0 — board is live but currently empty
 
   - type: ashby
     boards:
-      - cohere
+      - cohere              # 145 — Toronto-headquartered
 
 # ---------------------------------------------------------------------------
 # Two AND-ed groups: a posting must be BOTH a target role AND an internship.

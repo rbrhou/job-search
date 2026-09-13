@@ -28,6 +28,8 @@ class RunReport:
     notified: int = 0
     seeded: int = 0
     per_source: dict[str, int] = field(default_factory=dict)
+    #: filter name -> how many postings it rejected, for tuning the config
+    rejections: dict[str, int] = field(default_factory=dict)
     errors: list[str] = field(default_factory=list)
 
     def summary(self) -> str:
@@ -41,7 +43,12 @@ class RunReport:
             parts.append(f"seeded {self.seeded} (first run, no alerts sent)")
         if self.errors:
             parts.append(f"{len(self.errors)} source error(s)")
-        return ", ".join(parts)
+        line = ", ".join(parts)
+        if self.rejections:
+            ranked = sorted(self.rejections.items(), key=lambda kv: -kv[1])
+            breakdown = ", ".join(f"{name} {count}" for name, count in ranked)
+            line += f"\nrejected by: {breakdown}"
+        return line
 
 
 def collect(config: Config, client: HttpClient, report: RunReport) -> list[Job]:
@@ -80,7 +87,9 @@ def run(config: Config, dry_run: bool = False, explain: bool = False) -> RunRepo
             result = evaluate(job, config.match)
             if result.matched:
                 matched.append(job)
-            elif explain:
+                continue
+            report.rejections[result.category] = report.rejections.get(result.category, 0) + 1
+            if explain:
                 log.info("filtered out %s — %s (%s)", job.title, job.company, result.reason)
         report.matched = len(matched)
 
