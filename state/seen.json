@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-15T17:37:54.622315+00:00",
+  "updated_at": "2026-09-15T22:20:49.159386+00:00",
   "jobs": {
     "0347b578c0ef73f549b9": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
@@ -79,6 +79,13 @@
       "title": "Manufacturing Quality Engineer \u2013 Datacenter Infrastructure",
       "url": "https://jobs.ashbyhq.com/openai/ece054ea-ac75-4b8a-bdbf-5cdf19368312"
     },
+    "3eea48f879af277aba35": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "CIBC",
+      "title": "Risk Analytics Co-op Winter 2027",
+      "url": "https://cibc.wd3.myworkdayjobs.com/en-US/search/job/Toronto-ON/Risk-Analytics-Co-op-Winter-2027_2618885-1"
+    },
     "4437b63d4e3bd3614ec6": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
       "source": "greenhouse",
@@ -106,6 +113,13 @@
       "company": "openai",
       "title": "Infrastructure Sourcing Operations Lead",
       "url": "https://jobs.ashbyhq.com/openai/00f7eaa5-315d-44bd-9c11-047ee53f2b0d"
+    },
+    "528ab4c3ad44166e4455": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Actuarial Analyst, Corporate Actuary, Winter 2027 (Co-op/Internship) - 4 months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Actuarial-Analyst--Corporate-Actuary--Winter-2027--Co-op-Internship----4-months_R260024356-2"
     },
     "54739016748a305cf907": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
@@ -135,6 +149,13 @@
       "title": "Security Software Engineer, Detection & Response Platform",
       "url": "https://job-boards.greenhouse.io/anthropic/jobs/4595463008"
     },
+    "72269179c0ce007aea06": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Cloud Business & Strategy Analytics Analyst, Winter 2027 (Co-op/Internship) - 4 Months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Cloud-Business---Strategy-Analytics-Analyst--Winter-2027--Co-op-Internship----4-Months_R260024672-1"
+    },
     "724b9b6ffeeca64c33ad": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
       "source": "greenhouse",
@@ -155,6 +176,13 @@
       "company": "Stripe",
       "title": "Software Engineer - Smart Contract, Bridge",
       "url": "https://stripe.com/jobs/search?gh_jid=7507904"
+    },
+    "82313ecdc0eb2b9844cb": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Data Analytics Intern, Winter 2027 (Co-op/Internship) - 8 months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Data-Analytics-Intern--Winter-2027--Co-op-Internship----8-months_R260024336-1"
     },
     "8263c16a3a4b681f16f7": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
@@ -296,6 +324,13 @@
       "title": "Infrastructure Engineer, Privy",
       "url": "https://stripe.com/jobs/search?gh_jid=7462961"
     },
+    "df96557fa87b6b1b0c46": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Quantitative Developer (Alpha Research Team) - GAM, Summer 2027 (Co-op/Internship) - 12 months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Quantitative-Developer--Alpha-Research-Team----GAM--Summer-2027--Co-op-Internship----12-months_R260026715-3"
+    },
     "ef2a05454a29bd81567a": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
       "source": "ashby",
@@ -323,6 +358,13 @@
       "company": "openai",
       "title": "Control Systems Software Engineer, Robotics",
       "url": "https://jobs.ashbyhq.com/openai/60573bf4-13ad-4933-aba7-729f428e9f69"
+    },
+    "f99a96768333f80014fb": {
+      "first_seen": "2026-09-15T22:20:49.159249+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Actuarial Analyst, Pricing, Winter 2027 (Co-op/Internship) - 4 months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Actuarial-Analyst--Pricing--Winter-2027--Co-op-Internship----4-months_R260024333"
     }
   }
 }
