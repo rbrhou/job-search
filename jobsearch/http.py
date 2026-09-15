@@ -15,7 +15,15 @@ log = logging.getLogger(__name__)
 
 
 class FetchError(RuntimeError):
-    """A source could not be fetched. One source failing must not sink the run."""
+    """A source could not be fetched. One source failing must not sink the run.
+
+    Carries the HTTP status where there was one, so callers can tell apart
+    failures that a different URL might fix from ones that it cannot.
+    """
+
+    def __init__(self, message: str, status: int | None = None) -> None:
+        super().__init__(message)
+        self.status = status
 
 
 class HttpClient:
@@ -67,7 +75,9 @@ class HttpClient:
         except requests.RequestException as exc:
             raise FetchError(f"GET {url} failed: {exc}") from exc
         if response.status_code >= 400:
-            raise FetchError(f"GET {url} returned HTTP {response.status_code}")
+            raise FetchError(
+                f"GET {url} returned HTTP {response.status_code}", response.status_code
+            )
         return response
 
     def get_json(self, url: str, **kwargs: Any) -> Any:
@@ -95,7 +105,9 @@ class HttpClient:
         headers.update(kwargs.pop("headers", {}))
         response = self.post(url, json=payload, headers=headers, **kwargs)
         if response.status_code >= 400:
-            raise FetchError(f"POST {url} returned HTTP {response.status_code}")
+            raise FetchError(
+                f"POST {url} returned HTTP {response.status_code}", response.status_code
+            )
         try:
             return response.json()
         except ValueError as exc:

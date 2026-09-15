@@ -294,3 +294,49 @@ def test_a_tenant_on_no_pod_explains_both_failure_codes(caplog):
     client = FakeWorkdayClient([], fail_hosts=["myworkdayjobs.com"])
     assert list(make_source(client).fetch()) == []
     assert "404 means the site name is wrong" in caplog.text
+
+
+def test_a_404_stops_probing_because_the_pod_is_already_right():
+    # 404 means this pod serves the tenant but the site name is wrong; trying
+    # five more pods just burns a request each and cannot help.
+    class NotFound(FakeClient):
+        def __init__(self):
+            super().__init__()
+            self.attempts = []
+
+        def post_json(self, url, payload, **kwargs):
+            self.attempts.append(url)
+            raise FetchError("HTTP 404", 404)
+
+    client = NotFound()
+    assert list(make_source(client).fetch()) == []
+    assert len(client.attempts) == 1
+
+
+def test_a_422_keeps_probing_the_other_pods():
+    class Unprocessable(FakeClient):
+        def __init__(self):
+            super().__init__()
+            self.attempts = []
+
+        def post_json(self, url, payload, **kwargs):
+            self.attempts.append(url)
+            raise FetchError("HTTP 422", 422)
+
+    client = Unprocessable()
+    assert list(make_source(client).fetch()) == []
+    from jobsearch.sources.workday import POD_CANDIDATES
+
+    assert len(client.attempts) == len(POD_CANDIDATES)
+
+
+def test_probes_use_a_short_timeout_not_the_full_request_timeout():
+    captured = {}
+
+    class Recording(FakeClient):
+        def post_json(self, url, payload, **kwargs):
+            captured.update(kwargs)
+            return {"total": 0, "jobPostings": []}
+
+    list(make_source(Recording(), pod_probe_timeout=3).fetch())
+    assert captured["timeout"] == 3

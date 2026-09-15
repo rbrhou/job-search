@@ -150,15 +150,25 @@ class WorkdaySource(Source):
         opts = entry if isinstance(entry, dict) else {}
         allow_fallback = opts.get("pod_fallback", self.options.get("pod_fallback", True))
         candidates = host_variants(host) if allow_fallback else [host]
+        # A pod that exists answers in well under a second, and a pod that does
+        # not exist resolves through wildcard DNS and then hangs. Probing must
+        # not wait the full request timeout on each of those.
+        timeout = float(opts.get("pod_probe_timeout", self.options.get("pod_probe_timeout", 5.0)))
         last_error: Exception | None = None
 
         for candidate in candidates:
             url = f"https://{candidate}/wday/cxs/{tenant}/{site}/jobs"
             probe = {"appliedFacets": {}, "limit": 1, "offset": 0, "searchText": ""}
             try:
-                self.client.post_json(url, probe, headers={"Referer": f"https://{candidate}"})
+                self.client.post_json(
+                    url, probe, headers={"Referer": f"https://{candidate}"}, timeout=timeout
+                )
             except FetchError as exc:
                 last_error = exc
+                if exc.status == 404:
+                    # This pod does serve the tenant — the site name is what's
+                    # wrong, and no other pod can fix that. Stop probing.
+                    break
                 continue
             if candidate != host:
                 log.info(
