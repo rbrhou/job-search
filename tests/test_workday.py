@@ -16,14 +16,30 @@ URL = "https://sunlife.wd3.myworkdayjobs.com/en-US/Experienced-Jobs"
 
 
 class FakeWorkdayClient(FakeClient):
-    """Records POST bodies so pagination can be asserted."""
+    """Records POST bodies so pagination can be asserted.
 
-    def __init__(self, pages):
+    The source sends a `limit: 1` probe per employer to find a live pod; those
+    are recorded separately so `bodies` stays the list of real page fetches.
+    """
+
+    def __init__(self, pages, fail_hosts=()):
         super().__init__()
         self.pages = list(pages)
         self.bodies = []
+        self.probes = []
+        #: every probe URL tried, including ones that failed
+        self.attempts = []
+        #: hostname substrings whose requests should fail
+        self.fail_hosts = tuple(fail_hosts)
 
     def post_json(self, url, payload, **kwargs):
+        if payload.get("limit") == 1:
+            self.attempts.append(url)
+        if any(bad in url for bad in self.fail_hosts):
+            raise FetchError("HTTP 422")
+        if payload.get("limit") == 1:
+            self.probes.append(url)
+            return {"total": 1, "jobPostings": []}
         self.bodies.append(payload)
         if not self.pages:
             return {"total": 0, "jobPostings": []}
@@ -224,3 +240,57 @@ def test_duplicate_postings_across_terms_collapse_on_fingerprint():
     client = FakeWorkdayClient([page, page])
     jobs = list(make_source(client, search_texts=["intern", "co-op"], max_pages=1).fetch())
     assert len({job.fingerprint for job in jobs}) == 1
+
+
+# --- pod probing --------------------------------------------------------------
+
+def test_host_variants_puts_the_configured_pod_first():
+    from jobsearch.sources.workday import host_variants
+
+    variants = host_variants("intact.wd3.myworkdayjobs.com")
+    assert variants[0] == "intact.wd3.myworkdayjobs.com"
+    assert "intact.wd1.myworkdayjobs.com" in variants
+    assert all(v.startswith("intact.wd") for v in variants)
+
+
+def test_host_variants_leaves_a_non_workday_host_alone():
+    from jobsearch.sources.workday import host_variants
+
+    assert host_variants("careers.example.com") == ["careers.example.com"]
+
+
+def test_a_working_host_costs_exactly_one_probe():
+    client = FakeWorkdayClient([load_json_fixture("workday_page2.json")])
+    list(make_source(client, max_pages=1).fetch())
+    assert len(client.probes) == 1
+
+
+def test_a_tenant_on_another_pod_is_found_by_probing(caplog):
+    # wd3 answers 422 because the tenant lives elsewhere; wd1 serves it.
+    import logging
+
+    client = FakeWorkdayClient([load_json_fixture("workday_page2.json")], fail_hosts=["wd3"])
+    with caplog.at_level(logging.INFO, logger="jobsearch.sources.workday"):
+        jobs = list(make_source(client, max_pages=1).fetch())
+
+    assert len(jobs) == 1
+    # wd3 was tried and rejected before wd1 answered.
+    assert len(client.attempts) == 2
+    assert "wd3" in client.attempts[0]
+    assert "sunlife.wd1.myworkdayjobs.com" in client.probes[-1]
+    # The working URL is reported so it can be pinned in config.
+    assert "pin https://sunlife.wd1" in caplog.text
+
+
+def test_pod_fallback_can_be_switched_off(caplog):
+    client = FakeWorkdayClient([], fail_hosts=["wd3"])
+    assert list(make_source(client, pod_fallback=False).fetch()) == []
+    # Only the configured pod is tried; no probing of the alternatives.
+    assert len(client.attempts) == 1
+    assert client.probes == []
+
+
+def test_a_tenant_on_no_pod_explains_both_failure_codes(caplog):
+    client = FakeWorkdayClient([], fail_hosts=["myworkdayjobs.com"])
+    assert list(make_source(client).fetch()) == []
+    assert "404 means the site name is wrong" in caplog.text

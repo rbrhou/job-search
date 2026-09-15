@@ -171,3 +171,20 @@ def test_the_report_breaks_down_why_postings_were_rejected(tmp_path, patched_cli
     assert report.rejections == {"title_include": 1, "location_include": 1}
     assert "rejected by:" in report.summary()
     assert "location_include 1" in report.summary()
+
+
+def test_request_tuning_reaches_the_http_client(monkeypatch, tmp_path):
+    captured = {}
+
+    def fake_client(**kwargs):
+        captured.update(kwargs)
+        return FakeClient({"greenhouse": FakeResponse(json_body={"jobs": []})})
+
+    monkeypatch.setattr("jobsearch.pipeline.HttpClient", fake_client)
+    config = Config.from_dict(
+        base_config(tmp_path, request_timeout=8, request_retries=1)
+    )
+    run(config)
+
+    assert captured["timeout"] == 8
+    assert captured["max_retries"] == 1

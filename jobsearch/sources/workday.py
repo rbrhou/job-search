@@ -38,6 +38,14 @@ log = logging.getLogger(__name__)
 PAGE_SIZE = 20
 
 _LOCALE = re.compile(r"^[a-z]{2}(-[A-Za-z]{2})?$")
+_POD_HOST = re.compile(r"^(?P<tenant>[^.]+)\.(?P<pod>wd\d+)\.myworkdayjobs\.com$")
+
+#: Workday shards tenants across numbered pods. `*.wdN.myworkdayjobs.com` has
+#: wildcard DNS, so pointing at the wrong pod resolves and then fails at the
+#: application layer rather than in DNS — which is why a tenant on the wrong pod
+#: answers 422 while a wrong site name on the right pod answers 404. Probing the
+#: other pods recovers the first case without anyone looking a URL up by hand.
+POD_CANDIDATES = ("wd1", "wd2", "wd3", "wd5", "wd10", "wd12")
 _RELATIVE_POSTED = re.compile(r"(\d+)\+?\s*(day|days|hour|hours|month|months)\s*ago", re.IGNORECASE)
 
 
@@ -100,6 +108,16 @@ def parse_posted(text: str | None, now: datetime | None = None) -> datetime | No
     return now - deltas[unit]
 
 
+def host_variants(host: str) -> list[str]:
+    """The configured host first, then the same tenant on the other pods."""
+    match = _POD_HOST.match(host)
+    if not match:
+        return [host]
+    tenant, pod = match.group("tenant"), match.group("pod")
+    pods = [pod] + [p for p in POD_CANDIDATES if p != pod]
+    return [f"{tenant}.{p}.myworkdayjobs.com" for p in pods]
+
+
 @register
 class WorkdaySource(Source):
     type_name = "workday"
@@ -115,10 +133,45 @@ class WorkdaySource(Source):
                 continue
             name = entry.get("name", tenant) if isinstance(entry, dict) else tenant
             try:
+                host = self._resolve_host(entry, host, tenant, site, name)
                 yield from self._fetch_employer(entry, host, tenant, site, name)
             except FetchError as exc:
                 # A wrong site name 404s; one bad employer must not sink the run.
                 log.warning("workday: skipping %s (%s/%s): %s", name, tenant, site, exc)
+
+    def _resolve_host(
+        self, entry: Any, host: str, tenant: str, site: str, name: str
+    ) -> str:
+        """Find a pod that actually serves this tenant, with one cheap probe.
+
+        Returns the configured host untouched when it works, so the common case
+        costs a single extra request.
+        """
+        opts = entry if isinstance(entry, dict) else {}
+        allow_fallback = opts.get("pod_fallback", self.options.get("pod_fallback", True))
+        candidates = host_variants(host) if allow_fallback else [host]
+        last_error: Exception | None = None
+
+        for candidate in candidates:
+            url = f"https://{candidate}/wday/cxs/{tenant}/{site}/jobs"
+            probe = {"appliedFacets": {}, "limit": 1, "offset": 0, "searchText": ""}
+            try:
+                self.client.post_json(url, probe, headers={"Referer": f"https://{candidate}"})
+            except FetchError as exc:
+                last_error = exc
+                continue
+            if candidate != host:
+                log.info(
+                    "workday: %s is served by %s, not the configured host — pin "
+                    "https://%s/en-US/%s in config.yaml to skip this probe",
+                    name, candidate, candidate, site,
+                )
+            return candidate
+
+        raise FetchError(
+            f"no Workday pod served {tenant}/{site}; a 404 means the site name is "
+            f"wrong, a 422 that the tenant is elsewhere (last: {last_error})"
+        )
 
     def _search_terms(self, opts: dict[str, Any]) -> list[str]:
         """Which server-side searches to run for one employer.

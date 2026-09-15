@@ -35,6 +35,13 @@ class HttpClient:
         self.session.headers.update({"User-Agent": user_agent, "Accept-Language": "en-US,en;q=0.9"})
         retry = Retry(
             total=max_retries,
+            # Cap connect/read retries. Sources probe speculative hosts (Workday
+            # pods, guessed board slugs) where a failure is the expected answer,
+            # not a blip worth three more attempts at `timeout` each. Rate limits
+            # and 5xx still get the full budget, since those do pass.
+            connect=1,
+            read=1,
+            status=max_retries,
             backoff_factor=1.5,
             status_forcelist=(429, 500, 502, 503, 504),
             allowed_methods=("GET", "POST"),
