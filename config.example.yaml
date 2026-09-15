@@ -31,6 +31,17 @@ sources:
     accounts:
       - your-company
 
+  # Workday — banks, insurers and pension funds. Copy `url` straight from the
+  # address bar of the employer's careers page; tenant, pod and site name are
+  # all read from it. Narrow with search_texts: these boards are huge.
+  - type: workday
+    enabled: false
+    search_texts: [intern, co-op, student]
+    max_pages: 10
+    employers:
+      - name: Sun Life
+        url: https://sunlife.wd3.myworkdayjobs.com/en-US/Experienced-Jobs
+
   # Opt-in: LinkedIn's User Agreement prohibits automated scraping and the
   # endpoint blocks datacenter IPs, so a GitHub Actions run will often get
   # nothing back. Enabled only with accept_terms_risk, and a block is logged as

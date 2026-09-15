@@ -28,6 +28,54 @@ sources:
     boards:
       - cohere              # 145 — Toronto-headquartered
 
+  # --- Canadian banks, insurers and pension funds (Workday) -----------------
+  # This is where Canadian actuarial, quant and data internships actually are.
+  #
+  # To add or correct an employer: open their careers page, run a search, and
+  # copy the URL from the address bar. It looks like
+  #   https://<tenant>.wd3.myworkdayjobs.com/en-US/<SiteName>
+  # and that is exactly what goes in `url` — tenant, pod (wd1/wd3/wd5/...) and
+  # site name are all read from it. Guessed entries that 404 are logged and
+  # skipped, so a wrong URL costs nothing but that employer's coverage.
+  - type: workday
+    # These employers list thousands of roles, far past any page limit, so
+    # narrow server-side. Several terms are needed: a Canadian internship is
+    # variously an "intern", a "co-op" or a "student".
+    search_texts: [intern, co-op, student, summer, actuarial]
+    max_pages: 10
+    employers:
+      # Banks
+      - name: RBC
+        url: https://rbc.wd3.myworkdayjobs.com/en-US/RBCJOBS
+      - name: TD
+        url: https://td.wd3.myworkdayjobs.com/en-US/TD_Bank_Group_External_Careers
+      - name: BMO
+        url: https://bmo.wd3.myworkdayjobs.com/en-US/External
+      - name: Scotiabank
+        url: https://scotiabank.wd3.myworkdayjobs.com/en-US/Scotiabank_Careers
+      - name: CIBC
+        url: https://cibc.wd3.myworkdayjobs.com/en-US/search
+      - name: National Bank of Canada
+        url: https://bnc.wd3.myworkdayjobs.com/en-US/Careers
+      # Insurers — the home of actuarial internships
+      - name: Sun Life
+        url: https://sunlife.wd3.myworkdayjobs.com/en-US/Experienced-Jobs
+      - name: Manulife
+        url: https://manulife.wd3.myworkdayjobs.com/en-US/MFCJobs
+      - name: Canada Life
+        url: https://canadalife.wd3.myworkdayjobs.com/en-US/canadalifecareers
+      - name: Intact Financial
+        url: https://intact.wd3.myworkdayjobs.com/en-US/IFC_Careers
+      - name: Definity
+        url: https://definity.wd3.myworkdayjobs.com/en-US/Definity
+      # Pension funds
+      - name: CPP Investments
+        url: https://cppib.wd3.myworkdayjobs.com/en-US/CPPIB_Careers
+      - name: Ontario Teachers' Pension Plan
+        url: https://otpp.wd3.myworkdayjobs.com/en-US/OTPP
+      - name: OMERS
+        url: https://omers.wd3.myworkdayjobs.com/en-US/OMERS_Careers
+
 # ---------------------------------------------------------------------------
 # Two AND-ed groups: a posting must be BOTH a target role AND an internship.
 # Keywords inside a group are OR-ed; keywords match as substrings.

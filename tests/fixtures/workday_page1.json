@@ -1,0 +1,31 @@
+{
+  "total": 5,
+  "jobPostings": [
+    {
+      "title": "Actuarial Analyst Co-op (Summer 2027)",
+      "externalPath": "/job/Toronto-Ontario/Actuarial-Analyst-Co-op--Summer-2027-_JR00089421",
+      "locationsText": "Toronto, Ontario, Canada",
+      "postedOn": "Posted 3 Days Ago",
+      "bulletFields": ["JR00089421"]
+    },
+    {
+      "title": "Data Analyst Intern",
+      "externalPath": "/job/Remote-Canada/Data-Analyst-Intern_JR00089500",
+      "locationsText": "Remote - Canada",
+      "postedOn": "Posted Today",
+      "bulletFields": ["JR00089500"]
+    },
+    {
+      "title": "Quantitative Analyst, Summer Student",
+      "externalPath": "/job/Montreal-Quebec/Quantitative-Analyst--Summer-Student_JR00089610",
+      "locationsText": "3 Locations",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": ["JR00089610"]
+    },
+    {
+      "title": "Posting with no path",
+      "locationsText": "Toronto, Ontario, Canada",
+      "postedOn": "Posted Yesterday"
+    }
+  ]
+}

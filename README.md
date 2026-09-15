@@ -55,12 +55,45 @@ You can also trigger it by hand from the Actions tab, with a dry-run checkbox.
 | `lever` | `companies:` — the slug in `jobs.lever.co/<slug>` | Public postings API |
 | `ashby` | `boards:` — the slug in `jobs.ashbyhq.com/<slug>` | Public board API |
 | `workable` | `accounts:` — the slug in `apply.workable.com/<slug>` | Public widget API |
+| `workday` | `employers:` — each with the career-site `url` | Public career-site API; see below |
 | `linkedin` | `queries:` of keywords + location | **Opt-in**, see below |
 | `indeed` | `queries:` of what + where | **Opt-in**, see below |
 
 The first four are documented public endpoints that serve the same JSON a
 company's own careers page consumes. They are the reliable path: no bot
 detection, no rate-limit games, and they return the canonical apply link.
+
+### About the Workday source
+
+Banks, insurers and pension funds run overwhelmingly on Workday, so this source
+is what makes actuarial and most finance-sector roles reachable at all. It calls
+the same public JSON endpoint a company's own careers page calls — no scraping,
+no bot detection.
+
+To add an employer, open their careers page, run any search, and copy the URL
+from the address bar:
+
+```yaml
+- type: workday
+  search_texts: [intern, co-op, student]
+  employers:
+    - name: Sun Life
+      url: https://sunlife.wd3.myworkdayjobs.com/en-US/Experienced-Jobs
+```
+
+Tenant, pod (`wd1`/`wd3`/`wd5`/…) and site name are all read from that URL. A
+wrong URL 404s, which is logged and skipped — it costs that employer's coverage
+and nothing else.
+
+Two things worth knowing:
+
+- **Narrow with `search_texts`.** These employers carry thousands of open roles,
+  far past any page limit, so paginating the whole board is hopeless. Each term
+  runs its own query, because one search can't span the vocabulary — a Canadian
+  internship is variously an `intern`, a `co-op` or a `student`. Postings found
+  by more than one term collapse on fingerprint.
+- **Multi-location postings report `"3 Locations"`** instead of naming cities, so
+  `location_include` can't match them. That's Workday's API, not a parsing bug.
 
 ### About the LinkedIn and Indeed sources
 

@@ -78,5 +78,21 @@ class HttpClient:
         except requests.RequestException as exc:
             raise FetchError(f"POST {url} failed: {exc}") from exc
 
+    def post_json(self, url: str, payload: Any, **kwargs: Any) -> Any:
+        """POST JSON and parse the JSON reply, raising on an error status.
+
+        Separate from `post`, which returns the raw response without raising —
+        the Discord notifier inspects status codes itself to honour rate limits.
+        """
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        headers.update(kwargs.pop("headers", {}))
+        response = self.post(url, json=payload, headers=headers, **kwargs)
+        if response.status_code >= 400:
+            raise FetchError(f"POST {url} returned HTTP {response.status_code}")
+        try:
+            return response.json()
+        except ValueError as exc:
+            raise FetchError(f"POST {url} did not return JSON: {exc}") from exc
+
     def close(self) -> None:
         self.session.close()
