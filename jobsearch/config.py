@@ -139,6 +139,7 @@ class Config:
     max_per_run: int = 50
     notify_on_first_run: bool = False
     request_timeout: float = 20.0
+    request_retries: int = 3
     user_agent: str = (
         "jobsearch/0.1 (+https://github.com/rbrhou/job-search) personal job alert bot"
     )
@@ -193,6 +194,7 @@ class Config:
             max_per_run=int(raw.get("max_per_run", 50)),
             notify_on_first_run=bool(raw.get("notify_on_first_run", False)),
             request_timeout=float(raw.get("request_timeout", 20.0)),
+            request_retries=int(raw.get("request_retries", 3)),
             user_agent=raw.get("user_agent", cls.user_agent),
         )
 

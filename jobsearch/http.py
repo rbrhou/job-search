@@ -15,7 +15,15 @@ log = logging.getLogger(__name__)
 
 
 class FetchError(RuntimeError):
-    """A source could not be fetched. One source failing must not sink the run."""
+    """A source could not be fetched. One source failing must not sink the run.
+
+    Carries the HTTP status where there was one, so callers can tell apart
+    failures that a different URL might fix from ones that it cannot.
+    """
+
+    def __init__(self, message: str, status: int | None = None) -> None:
+        super().__init__(message)
+        self.status = status
 
 
 class HttpClient:
@@ -35,6 +43,13 @@ class HttpClient:
         self.session.headers.update({"User-Agent": user_agent, "Accept-Language": "en-US,en;q=0.9"})
         retry = Retry(
             total=max_retries,
+            # Cap connect/read retries. Sources probe speculative hosts (Workday
+            # pods, guessed board slugs) where a failure is the expected answer,
+            # not a blip worth three more attempts at `timeout` each. Rate limits
+            # and 5xx still get the full budget, since those do pass.
+            connect=1,
+            read=1,
+            status=max_retries,
             backoff_factor=1.5,
             status_forcelist=(429, 500, 502, 503, 504),
             allowed_methods=("GET", "POST"),
@@ -60,7 +75,9 @@ class HttpClient:
         except requests.RequestException as exc:
             raise FetchError(f"GET {url} failed: {exc}") from exc
         if response.status_code >= 400:
-            raise FetchError(f"GET {url} returned HTTP {response.status_code}")
+            raise FetchError(
+                f"GET {url} returned HTTP {response.status_code}", response.status_code
+            )
         return response
 
     def get_json(self, url: str, **kwargs: Any) -> Any:
@@ -77,6 +94,24 @@ class HttpClient:
             return self.session.post(url, **kwargs)
         except requests.RequestException as exc:
             raise FetchError(f"POST {url} failed: {exc}") from exc
+
+    def post_json(self, url: str, payload: Any, **kwargs: Any) -> Any:
+        """POST JSON and parse the JSON reply, raising on an error status.
+
+        Separate from `post`, which returns the raw response without raising —
+        the Discord notifier inspects status codes itself to honour rate limits.
+        """
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        headers.update(kwargs.pop("headers", {}))
+        response = self.post(url, json=payload, headers=headers, **kwargs)
+        if response.status_code >= 400:
+            raise FetchError(
+                f"POST {url} returned HTTP {response.status_code}", response.status_code
+            )
+        try:
+            return response.json()
+        except ValueError as exc:
+            raise FetchError(f"POST {url} did not return JSON: {exc}") from exc
 
     def close(self) -> None:
         self.session.close()

@@ -78,7 +78,11 @@ def collect(config: Config, client: HttpClient, report: RunReport) -> list[Job]:
 def run(config: Config, dry_run: bool = False, explain: bool = False) -> RunReport:
     """One full pass. `dry_run` skips both notification and state writes."""
     report = RunReport()
-    client = HttpClient(user_agent=config.user_agent, timeout=config.request_timeout)
+    client = HttpClient(
+        user_agent=config.user_agent,
+        timeout=config.request_timeout,
+        max_retries=config.request_retries,
+    )
     try:
         jobs = collect(config, client, report)
 
