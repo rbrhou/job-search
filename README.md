@@ -94,13 +94,14 @@ Two things worth knowing:
   by more than one term collapse on fingerprint.
 - **Multi-location postings report `"3 Locations"`** instead of naming cities, so
   `location_include` can't match them. That's Workday's API, not a parsing bug.
-- **The pod in the URL is auto-corrected.** Workday shards tenants across
-  numbered pods (`wd1`, `wd3`, `wd5`, …), and `*.wdN.myworkdayjobs.com` has
-  wildcard DNS, so the wrong pod fails at the application layer rather than in
-  DNS: a tenant on another pod answers **422**, while a wrong site name on the
-  right pod answers **404**. On a failure the source probes the other pods and
-  logs the URL that worked, so paste anything and it usually still resolves.
-  Set `pod_fallback: false` to disable the probing.
+- **Read the failure code.** Workday shards tenants across numbered pods
+  (`wd1`, `wd3`, `wd5`, …). A **404** means the pod is right and the site name
+  is wrong; a **422** means the tenant lives on a different pod. `pod_fallback:
+  true` makes the source try the other pods and log the URL that worked, but it
+  is **off by default and slow** — a non-existent pod hostname costs a DNS
+  lookup that no socket timeout bounds, and a dozen of those took a dry run
+  from under a minute to over twenty. Use it for a one-off discovery run, pin
+  the URLs it logs, then turn it back off.
 
 ### About the LinkedIn and Indeed sources
 

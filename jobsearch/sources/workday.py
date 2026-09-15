@@ -40,11 +40,15 @@ PAGE_SIZE = 20
 _LOCALE = re.compile(r"^[a-z]{2}(-[A-Za-z]{2})?$")
 _POD_HOST = re.compile(r"^(?P<tenant>[^.]+)\.(?P<pod>wd\d+)\.myworkdayjobs\.com$")
 
-#: Workday shards tenants across numbered pods. `*.wdN.myworkdayjobs.com` has
-#: wildcard DNS, so pointing at the wrong pod resolves and then fails at the
-#: application layer rather than in DNS — which is why a tenant on the wrong pod
-#: answers 422 while a wrong site name on the right pod answers 404. Probing the
-#: other pods recovers the first case without anyone looking a URL up by hand.
+#: Workday shards tenants across numbered pods. A tenant on the wrong pod
+#: answers 422, while a wrong site name on the right pod answers 404, so a 422
+#: can sometimes be recovered by trying the other pods.
+#:
+#: This is OFF by default (`pod_fallback: true` opts in) because it is slow in a
+#: way no timeout fixes: a non-existent pod hostname costs a DNS lookup that
+#: getaddrinfo does not bound by the socket timeout, and a dozen employers'
+#: worth of those took a dry run from under a minute to over twenty. Enable it
+#: for a one-off discovery run, then pin the URLs it logs.
 POD_CANDIDATES = ("wd1", "wd2", "wd3", "wd5", "wd10", "wd12")
 _RELATIVE_POSTED = re.compile(r"(\d+)\+?\s*(day|days|hour|hours|month|months)\s*ago", re.IGNORECASE)
 
@@ -148,7 +152,7 @@ class WorkdaySource(Source):
         costs a single extra request.
         """
         opts = entry if isinstance(entry, dict) else {}
-        allow_fallback = opts.get("pod_fallback", self.options.get("pod_fallback", True))
+        allow_fallback = opts.get("pod_fallback", self.options.get("pod_fallback", False))
         candidates = host_variants(host) if allow_fallback else [host]
         # A pod that exists answers in well under a second, and a pod that does
         # not exist resolves through wildcard DNS and then hangs. Probing must

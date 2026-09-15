@@ -271,7 +271,7 @@ def test_a_tenant_on_another_pod_is_found_by_probing(caplog):
 
     client = FakeWorkdayClient([load_json_fixture("workday_page2.json")], fail_hosts=["wd3"])
     with caplog.at_level(logging.INFO, logger="jobsearch.sources.workday"):
-        jobs = list(make_source(client, max_pages=1).fetch())
+        jobs = list(make_source(client, max_pages=1, pod_fallback=True).fetch())
 
     assert len(jobs) == 1
     # wd3 was tried and rejected before wd1 answered.
@@ -292,7 +292,7 @@ def test_pod_fallback_can_be_switched_off(caplog):
 
 def test_a_tenant_on_no_pod_explains_both_failure_codes(caplog):
     client = FakeWorkdayClient([], fail_hosts=["myworkdayjobs.com"])
-    assert list(make_source(client).fetch()) == []
+    assert list(make_source(client, pod_fallback=True).fetch()) == []
     assert "404 means the site name is wrong" in caplog.text
 
 
@@ -309,7 +309,7 @@ def test_a_404_stops_probing_because_the_pod_is_already_right():
             raise FetchError("HTTP 404", 404)
 
     client = NotFound()
-    assert list(make_source(client).fetch()) == []
+    assert list(make_source(client, pod_fallback=True).fetch()) == []
     assert len(client.attempts) == 1
 
 
@@ -324,7 +324,7 @@ def test_a_422_keeps_probing_the_other_pods():
             raise FetchError("HTTP 422", 422)
 
     client = Unprocessable()
-    assert list(make_source(client).fetch()) == []
+    assert list(make_source(client, pod_fallback=True).fetch()) == []
     from jobsearch.sources.workday import POD_CANDIDATES
 
     assert len(client.attempts) == len(POD_CANDIDATES)
@@ -340,3 +340,10 @@ def test_probes_use_a_short_timeout_not_the_full_request_timeout():
 
     list(make_source(Recording(), pod_probe_timeout=3).fetch())
     assert captured["timeout"] == 3
+
+
+def test_pod_probing_is_off_unless_asked_for():
+    # Default must stay cheap: one request, no speculative DNS lookups.
+    client = FakeWorkdayClient([], fail_hosts=["wd3"])
+    assert list(make_source(client).fetch()) == []
+    assert len(client.attempts) == 1
