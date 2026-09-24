@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-23T17:49:11.601386+00:00",
+  "updated_at": "2026-09-24T17:50:03.377437+00:00",
   "jobs": {
     "0347b578c0ef73f549b9": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
@@ -22,6 +22,13 @@
       "company": "ramp",
       "title": "Software Engineer, Forward Deployed",
       "url": "https://jobs.ashbyhq.com/ramp/9916e9da-7491-4c99-afd1-e4b8158fa58b"
+    },
+    "10bf38fb01dc021751e9": {
+      "first_seen": "2026-09-24T17:50:03.377325+00:00",
+      "source": "workday",
+      "company": "BMO",
+      "title": "Actuarial Analyst, Winter 2027 (Co-op/Internship) - 4 months",
+      "url": "https://bmo.wd3.myworkdayjobs.com/en-US/External/job/Toronto-ON-CAN/Actuarial-Analyst--Winter-2027--Co-op-Internship----4-months_R260027054"
     },
     "12379fbf020a5262f440": {
       "first_seen": "2026-09-11T16:59:13.852498+00:00",
